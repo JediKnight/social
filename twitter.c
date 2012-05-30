@@ -1,32 +1,41 @@
 #include "twitter.h"
 
-char *escape_dquote(char *str)
-{
-  int i,j = 0;
-  char *buf;
+/* char *escape_dquote(char *str) */
+/* { */
+/*   int i,j = 0; */
+/*   char *buf; */
 
-  for(i = 0; i < strlen(str); i++)
-    {
-      if(str[i] == '"')
-	{
-	  j++;
-	}
-    }
+/*   /\* */
+/*    * エスケープ対象の文字数算出 */
+/*    *\/ */
+/*   for(i = 0; i < strlen(str); i++) */
+/*     { */
+/*       if(str[i] == '"') */
+/* 	{ */
+/* 	  j++; */
+/* 	} */
+/*     } */
 
-  buf = malloc(strlen(str) + j);
+/*   /\* */
+/*    * 渡された文字列 + エスケープする文字数分のメモリ確保 */
+/*    *\/ */
+/*   buf = malloc(strlen(str) + j); */
 
-  for(i = 0, j = 0; i < strlen(str); i++, j++)
-    {
-      if(str[i] == '"')
-	{
-	  buf[j++] = '\\';
-	}
+/*   /\* */
+/*    * "をエスケープ */
+/*    *\/ */
+/*   for(i = 0, j = 0; i < strlen(str); i++, j++) */
+/*     { */
+/*       if(str[i] == '"') */
+/* 	{ */
+/* 	  buf[j++] = '\\'; */
+/* 	} */
 
-      buf[j] = str[i];
-    }
+/*       buf[j] = str[i]; */
+/*     } */
 
-  return buf;
-}
+/*   return buf; */
+/* } */
 
 int twpost(char *msg)
 {
@@ -43,21 +52,14 @@ int twget()
 {
   char *url = "http://api.twitter.com/statuses/user_timeline/X2xAmpJDY3GMvq.json";
   char *req_url = NULL;
-  char *buf = NULL;
-  char *buf2 = NULL;
   struct json_object *jstr;
 
   req_url = oauth_sign_url2(url, NULL, OA_HMAC, "GET", consumer_key, consumer_secret, access_token, access_token_secret);
-
-  buf = escape_dquote(oauth_http_get(req_url, NULL));
-  /* printf("%s\n", buf); */
-
-  jstr = json_tokener_parse(buf);
-  /* printf("obj.to_string()=%s\n", json_object_to_json_string(jstr)); */
-  /* json_object_object_foreach(jstr, key, val) printf("(key, val) = (%s, %s)\n", key, json_object_to_json_string(val)); */
+  jstr = json_tokener_parse(oauth_http_get(req_url, NULL));
+  /* printf("jstr.to_string() = %s\n", json_object_to_json_string(jstr)); */
+  json_object_object_foreach(jstr, key, val) printf("(key, val) = (%s, %s)\n", key, json_object_get_string(val));
 
   json_object_put(jstr);
-  free(buf);
 
   return 0;
 }
