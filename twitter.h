@@ -6,7 +6,8 @@
 #include <string.h>
 #include <ctype.h>
 #include <oauth.h>
-#include <json/json.h>
+/* #include <json/json.h> */
+#include <yajl/yajl_tree.h>
 
 const char *own = "X2xAmpJDY3GMvq";
 const char *consumer_key = "UBr9VDErATmbbNPwhwdUgw";

@@ -3,24 +3,16 @@ CC=gcc
 PROGRAM=twitter
 OBJS=twitter.o
 SRCS=$(OBJS:%.o=%.c)
-CFLAGS=-Wall -loauth -lcurl -ljson -std=gnu99 -g
-LDFLAGS=
-
-DPROGRAM=debug_twitter
-DOBJS=twitter.o
-DSRCS=$(DOBJS:%.o=%.c)
-DCFLAG=-Wall -D_DEBUG_ -loauth -lcurl -ljson -std=gnu99 -g
-DLDFLAGS=
+CFLAGS=-Wall -std=gnu99 -g
+DBGFLAGS=-D_DEBUG_
+LDFLAGS=-loauth -lcurl -lyajl
 
 $(PROGRAM): $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $(PROGRAM) $(OBJS) $(LDLIBS)
 
-debug:$(OBJS)
-	$(CC) $(DCFLAG) $(DLDFLAGS) -o $(DPROGRAM) $(DOBJS) $(DLDLIBS)
+debug: $(OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(DBGLAGS) -o $(PROGRAM) $(OBJS) $(LDLIBS)
 
 clean:
 	rm -f $(PROGRAM)
 	rm -f $(OBJS)
-	rm -f $(DPROGRAM)
-	rm -f $(DOBJS)
-
